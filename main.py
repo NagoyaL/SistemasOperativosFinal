@@ -4,6 +4,14 @@ from container_manager import ContainerManager
 from scheduler import Scheduler
 from command_logger import CommandLogger
 
+ALGORITHMS = {
+    1: "FCFS",
+    2: "Round Robin",
+    3: "SPN",
+    4: "SRT",
+    5: "HRRN"
+}
+
 def main():
     if not os.path.exists('data'):
         os.makedirs('data')
@@ -11,10 +19,12 @@ def main():
     container_manager = ContainerManager()
     logger = CommandLogger()
     scheduler = Scheduler(container_manager, logger)
+    executions = load_executions()
 
-    print("1. New execution")
-    print("2. List past executions")
-    choice = int(input("Enter your choice (1-2): "))
+    print("1. Nueva ejecucion")
+    print("2. Usar ejecucion pasada con otro algoritmo")
+    print("3. Listar ejecuciones pasadas")
+    choice = int(input("Enter your choice (1-3): "))
 
     if choice == 1:
         commands = []
@@ -30,43 +40,39 @@ def main():
             logger.log_command(command, start_time, estimated_time)
 
         print("Select scheduling algorithm:")
-        print("1. FCFS")
-        print("2. Round Robin")
-        print("3. SPN")
-        print("4. SRT")
-        print("5. HRRN")
+        for key, value in ALGORITHMS.items():
+            print(f"{key}. {value}")
 
         choice = int(input("Enter your choice (1-5): "))
 
-        if choice == 1:
-            print("Executing with FCFS scheduling:")
-            scheduler.fcfs()
-        elif choice == 2:
-            print("Executing with Round Robin scheduling:")
-            scheduler.round_robin()
-        elif choice == 3:
-            print("Executing with SPN scheduling:")
-            scheduler.spn()
-        elif choice == 4:
-            print("Executing with SRT scheduling:")
-            scheduler.srt()
-        elif choice == 5:
-            print("Executing with HRRN scheduling:")
-            scheduler.hrrn()
-        else:
+        algorithm_name = ALGORITHMS.get(choice, "Invalid")
+        if algorithm_name == "Invalid":
             print("Invalid choice. Exiting.")
             return
+
+        print(f"Executing with {algorithm_name} scheduling:")
+        if choice == 1:
+            scheduler.fcfs()
+        elif choice == 2:
+            scheduler.round_robin()
+        elif choice == 3:
+            scheduler.spn()
+        elif choice == 4:
+            scheduler.srt()
+        elif choice == 5:
+            scheduler.hrrn()
 
         scheduler.show_times()
         execution = {
             'commands': commands,
-            'algorithm': choice,
+            'algorithm': algorithm_name,
             'log': scheduler.execution_log
         }
         logger.save_execution(execution)
 
         print("\nLogged commands:")
         logger.list_commands()
+
     elif choice == 2:
         past_executions = logger.load_executions()
         if not past_executions:
@@ -87,42 +93,68 @@ def main():
             scheduler.add_command(command, start_time, estimated_time)
 
         print("Select new scheduling algorithm:")
-        print("1. FCFS")
-        print("2. Round Robin")
-        print("3. SPN")
-        print("4. SRT")
-        print("5. HRRN")
+        for key, value in ALGORITHMS.items():
+            print(f"{key}. {value}")
 
         new_choice = int(input("Enter your choice (1-5): "))
 
-        if new_choice == 1:
-            print("Executing with FCFS scheduling:")
-            scheduler.fcfs()
-        elif new_choice == 2:
-            print("Executing with Round Robin scheduling:")
-            scheduler.round_robin()
-        elif new_choice == 3:
-            print("Executing with SPN scheduling:")
-            scheduler.spn()
-        elif new_choice == 4:
-            print("Executing with SRT scheduling:")
-            scheduler.srt()
-        elif new_choice == 5:
-            print("Executing with HRRN scheduling:")
-            scheduler.hrrn()
-        else:
+        new_algorithm_name = ALGORITHMS.get(new_choice, "Invalid")
+        if new_algorithm_name == "Invalid":
             print("Invalid choice. Exiting.")
             return
+
+        print(f"Executing with {new_algorithm_name} scheduling:")
+        if new_choice == 1:
+            scheduler.fcfs()
+        elif new_choice == 2:
+            scheduler.round_robin()
+        elif new_choice == 3:
+            scheduler.spn()
+        elif new_choice == 4:
+            scheduler.srt()
+        elif new_choice == 5:
+            scheduler.hrrn()
 
         scheduler.show_times()
         new_execution = {
             'commands': execution['commands'],
-            'algorithm': new_choice,
+            'algorithm': new_algorithm_name,
             'log': scheduler.execution_log
         }
         logger.save_execution(new_execution)
+
+    elif choice == 3:
+        list_executions(executions)    
     else:
         print("Invalid choice. Exiting.")
+
+def load_executions():
+    if os.path.exists('data/executions.json'):
+        with open('data/executions.json', 'r') as f:
+            return json.load(f)
+    return []
+
+def save_execution(commands, algorithm, execution_log):
+    executions = load_executions()
+    executions.append({
+        "commands": commands,
+        "algorithm": algorithm,
+        "execution_log": execution_log
+    })
+    with open('data/executions.json', 'w') as f:
+        json.dump(executions, f, indent=4)
+
+def list_executions(executions):
+    for i, execution in enumerate(executions):
+        print(f"\nExecution {i+1}:")
+        print(f"Algorithm: {execution['algorithm']}")
+        print("Commands:")
+        for command, start_time, estimated_time in execution['commands']:
+            print(f"  Command: {command}, Start time: {start_time}, Estimated time: {estimated_time}")
+        print("Log:")
+        for log in execution['log']:
+            command, turnaround_time, response_time = log
+            print(f"  Command: {command}, Turnaround time: {turnaround_time:.2f}, Response time: {response_time:.2f}")
 
 if __name__ == "__main__":
     main()
