@@ -1,0 +1,6 @@
+echo hola2,1,2
+echo hola3,1,3
+echo hola1,1,2
+echo hola3,3,4
+uptime,1,2
+echo ejemplo2,3,4

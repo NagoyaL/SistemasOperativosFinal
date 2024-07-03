@@ -14,10 +14,10 @@ class Scheduler:
     def fcfs(self):
         self.commands.sort(key=lambda x: x[1])
         for command, start_time, estimated_time in self.commands:
-            image = self.container_manager.create_or_get_image(command)
+            image_name = self.container_manager.create_or_get_image(command)
             time.sleep(start_time)
             start_exec_time = time.time()
-            self.container_manager.run_container(image)
+            self.container_manager.run_container(image_name)
             time.sleep(estimated_time)
             end_exec_time = time.time()
             turnaround_time = end_exec_time - start_exec_time
@@ -36,11 +36,11 @@ class Scheduler:
                 time.sleep(start_time - current_time)
                 current_time = start_time
 
-            image = self.container_manager.create_or_get_image(command)
+            image_name = self.container_manager.create_or_get_image(command)
             start_exec_time = time.time()
 
             if estimated_time <= quantum:
-                self.container_manager.run_container(image)
+                self.container_manager.run_container(image_name)
                 time.sleep(estimated_time)
                 end_exec_time = time.time()
                 turnaround_time = end_exec_time - start_exec_time
@@ -48,7 +48,7 @@ class Scheduler:
                 self.execution_log.append((command, turnaround_time, response_time))
                 current_time += estimated_time
             else:
-                self.container_manager.run_container(image)
+                self.container_manager.run_container(image_name)
                 time.sleep(quantum)
                 end_exec_time = time.time()
                 remaining_time = estimated_time - quantum
@@ -61,10 +61,10 @@ class Scheduler:
     def spn(self):
         self.commands.sort(key=lambda x: x[2])
         for command, start_time, estimated_time in self.commands:
-            image = self.container_manager.create_or_get_image(command)
+            image_name = self.container_manager.create_or_get_image(command)
             time.sleep(start_time)
             start_exec_time = time.time()
-            self.container_manager.run_container(image)
+            self.container_manager.run_container(image_name)
             time.sleep(estimated_time)
             end_exec_time = time.time()
             turnaround_time = end_exec_time - start_exec_time
@@ -80,11 +80,11 @@ class Scheduler:
         while remaining_times:
             next_command = min(remaining_times, key=remaining_times.get)
             estimated_time = remaining_times[next_command]
-            image = self.container_manager.create_or_get_image(next_command)
+            image_name = self.container_manager.create_or_get_image(next_command)
             start_exec_time = time.time()
 
             if estimated_time > 0:
-                self.container_manager.run_container(image)
+                self.container_manager.run_container(image_name)
                 time.sleep(1)
                 remaining_times[next_command] -= 1
                 if remaining_times[next_command] <= 0:
@@ -109,12 +109,12 @@ class Scheduler:
             hrrn_scores.sort(reverse=True)
             _, command, start_time, estimated_time = hrrn_scores.pop(0)
             self.commands.remove((command, start_time, estimated_time))
-            image = self.container_manager.create_or_get_image(command)
+            image_name = self.container_manager.create_or_get_image(command)
             if current_time < start_time:
                 time.sleep(start_time - current_time)
                 current_time = start_time
             start_exec_time = time.time()
-            self.container_manager.run_container(image)
+            self.container_manager.run_container(image_name)
             time.sleep(estimated_time)
             end_exec_time = time.time()
             turnaround_time = end_exec_time - start_exec_time
