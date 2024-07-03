@@ -4,3 +4,7 @@ echo hola1,1,2
 echo hola3,3,4
 uptime,1,2
 echo ejemplo2,3,4
+echo ejemplo1,1,2
+echo ejemplo2,2,5
+echo ejemplo3,1,5
+echo ejemplo4,5,2

@@ -11,6 +11,9 @@ class Scheduler:
     def add_command(self, command, start_time, estimated_time):
         self.commands.append((command, start_time, estimated_time))
 
+    def clear_commands(self):
+        self.commands = []
+
     def fcfs(self):
         self.commands.sort(key=lambda x: x[1])
         for command, start_time, estimated_time in self.commands:
@@ -133,3 +136,6 @@ class Scheduler:
 
         print(f"\nAverage Turnaround time: {total_turnaround_time / num_commands:.2f}")
         print(f"Average Response time: {total_response_time / num_commands:.2f}")
+
+
+
