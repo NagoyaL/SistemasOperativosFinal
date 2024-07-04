@@ -64,8 +64,8 @@ def main():
 
         scheduler.show_times()
         execution = {
-            'comandos': commands,
-            'algoritmo': algorithm_name,
+            'commands': commands,
+            'algorithm': algorithm_name,
             'log': scheduler.execution_log
         }
         logger.save_execution(execution)

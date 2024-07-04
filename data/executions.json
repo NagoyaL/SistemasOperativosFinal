@@ -103,5 +103,59 @@
                 1720063634.049224
             ]
         ]
+    },
+    {
+        "commands": [
+            [
+                "echo holaejemplo1",
+                1,
+                2
+            ],
+            [
+                "echo holaejemplo2",
+                4,
+                1
+            ]
+        ],
+        "algorithm": "FCFS",
+        "log": [
+            [
+                "echo holaejemplo1",
+                2.3143553733825684,
+                1720073664.2436485
+            ],
+            [
+                "echo holaejemplo2",
+                1.3490204811096191,
+                1720073667.559073
+            ]
+        ]
+    },
+    {
+        "commands": [
+            [
+                "echo holaejemplo1",
+                1,
+                2
+            ],
+            [
+                "echo holaejemplo2",
+                4,
+                1
+            ]
+        ],
+        "algorithm": "SPN",
+        "log": [
+            [
+                "echo holaejemplo2",
+                1.3620195388793945,
+                1720073716.6259665
+            ],
+            [
+                "echo holaejemplo1",
+                2.343066930770874,
+                1720073721.990009
+            ]
+        ]
     }
 ]
