@@ -24,33 +24,33 @@ def main():
     print("1. Nueva ejecucion")
     print("2. Usar ejecucion pasada con otro algoritmo")
     print("3. Listar ejecuciones pasadas")
-    choice = int(input("Enter your choice (1-3): "))
+    choice = int(input("Escoja (1-3): "))
 
     if choice == 1:
         commands = []
 
         while True:
-            command = input("Enter command to schedule (or 'done' to finish): ")
+            command = input("Ingrese el comando (o escriba 'done' para finalizar): ")
             if command.lower() == 'done':
                 break
-            start_time = int(input("Enter start time for the command: "))
-            estimated_time = int(input("Enter estimated execution time for the command: "))
+            start_time = int(input("Ingrese el tiempo de inicio para el comando: "))
+            estimated_time = int(input("Ingrese el tiempo estimado de ejecucion para el comando: "))
             commands.append((command, start_time, estimated_time))
             scheduler.add_command(command, start_time, estimated_time)
             logger.log_command(command, start_time, estimated_time)
 
-        print("Select scheduling algorithm:")
+        print("Seleccione el algoritmo de planificacion:")
         for key, value in ALGORITHMS.items():
             print(f"{key}. {value}")
 
-        choice = int(input("Enter your choice (1-5): "))
+        choice = int(input("Escoja (1-5): "))
 
         algorithm_name = ALGORITHMS.get(choice, "Invalid")
         if algorithm_name == "Invalid":
             print("Invalid choice. Exiting.")
             return
 
-        print(f"Executing with {algorithm_name} scheduling:")
+        print(f"Ejecutando con {algorithm_name} :")
         if choice == 1:
             scheduler.fcfs()
         elif choice == 2:
@@ -64,14 +64,11 @@ def main():
 
         scheduler.show_times()
         execution = {
-            'commands': commands,
-            'algorithm': algorithm_name,
+            'comandos': commands,
+            'algoritmo': algorithm_name,
             'log': scheduler.execution_log
         }
         logger.save_execution(execution)
-
-        print("\nLogged commands:")
-        logger.list_commands()
 
     elif choice == 2:
         past_executions = logger.load_executions()
@@ -92,11 +89,11 @@ def main():
         for command, start_time, estimated_time in execution['commands']:
             scheduler.add_command(command, start_time, estimated_time)
 
-        print("Select new scheduling algorithm:")
+        print("Seleccione un nuevo algoritmo de planificacion:")
         for key, value in ALGORITHMS.items():
             print(f"{key}. {value}")
 
-        new_choice = int(input("Enter your choice (1-5): "))
+        new_choice = int(input("Escoja (1-5): "))
 
         new_algorithm_name = ALGORITHMS.get(new_choice, "Invalid")
         if new_algorithm_name == "Invalid":

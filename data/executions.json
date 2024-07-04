@@ -95,39 +95,12 @@
                 2
             ]
         ],
-        "algorithm": "SRT",
+        "algorithm": "Round Robin",
         "log": [
             [
                 "echo hola ejemplo",
-                1.3762719631195068,
-                1720047455.0926633
-            ]
-        ]
-    },
-    {
-        "commands": [
-            [
-                "echo hola ejemplo funciona",
-                1,
-                2
-            ],
-            [
-                "uptime",
-                4,
-                6
-            ]
-        ],
-        "algorithm": "SPN",
-        "log": [
-            [
-                "echo hola ejemplo funciona",
-                2.3050589561462402,
-                1720047600.5956652
-            ],
-            [
-                "uptime",
-                6.342475891113281,
-                1720047603.9019928
+                2.4522757530212402,
+                1720063634.049224
             ]
         ]
     }
